@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Generic Messenger</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="connect">Connect</string>
+    <string name="notice">This app is a simple showcase of building messenger apps using publish/subscribe patterns; this app should NOT be used as a replacement for, or alternative to, real messenger apps such as Skype, Viber or Whatsapp.</string>
+    <string name="notice_github">The source code for this app is freely available on GitHub.</string>
+    <string name="failed_phone">I couldn\'t find your phone number, unable to connect to service.</string>
+    <string name="profile_head">Profile for:</string>
+    <string name="send">send</string>
+
+</resources>
