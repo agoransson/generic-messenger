@@ -143,9 +143,9 @@ public class ChatFragment extends Fragment implements Notifiable {
 
 		String sender = msg.getSender();
 
-		if (sender.equals(this.sender)) {
+//		if (sender.equals(this.sender)) {
 			messages.add(msg);
-		}
+//		}
 
 		adapter.notifyDataSetChanged();
 

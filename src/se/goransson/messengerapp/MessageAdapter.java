@@ -19,7 +19,8 @@ package se.goransson.messengerapp;
 
 import java.util.List;
 
-import android.content.Context;
+import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +35,13 @@ import android.widget.TextView;
  */
 public class MessageAdapter extends ArrayAdapter<Message> {
 
+	private static final String TAG = "MessageAdapter";
+	
 	List<Message> messages;
-	Context context;
+	Activity context;
 	int layoutId;
 
-	public MessageAdapter(Context context, int textViewResourceId,
+	public MessageAdapter(Activity context, int textViewResourceId,
 			List<Message> messages) {
 		super(context, textViewResourceId, messages);
 		this.context = context;
@@ -52,10 +55,18 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		ViewHolder holder;
 		
 		if( layoutId != R.layout.chat_item ){
-			if (messages.get(position) instanceof IncommingMessage) {
-				layoutId = R.layout.message_item_incomming;
-			} else if (messages.get(position) instanceof OutgoingMessage) {
+//			if (messages.get(position) instanceof IncommingMessage) {
+//				layoutId = R.layout.message_item_incomming;
+//			} else if (messages.get(position) instanceof OutgoingMessage) {
+//				layoutId = R.layout.message_item_outgoing;
+//			}
+			MainActivity act = (MainActivity) context;
+			if( messages.get(position).getSender().equals(act.getPhonenbr())){
 				layoutId = R.layout.message_item_outgoing;
+				Log.i(TAG, "outgoing");
+			}else{
+				layoutId = R.layout.message_item_incomming;
+				Log.i(TAG, "incomming");
 			}
 		}
 		

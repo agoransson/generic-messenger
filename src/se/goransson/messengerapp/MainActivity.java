@@ -39,6 +39,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
+
 /**
  * 
  * @author andreas
@@ -59,8 +64,8 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 	private Handler mHandler = new Handler(new MQTTCallback());
 
 	private static String topicBase = "/genericmessenger/";
-	private String phoneNbr = "";
-	
+	private String phoneNbr = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -100,7 +105,7 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		
+
 		return true;
 	}
 
@@ -160,13 +165,13 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 				try {
 					JSONObject json = new JSONObject(encoded);
 					String sender = json.getString("sender");
+					String recipient = json.getString("recipient");
 					String message = json.getString("message");
 
-					long id = mDbController.putMessage(sender, message);
+					Log.i(TAG, json.toString(2));
 
-//					Toast.makeText(MainActivity.this,
-//							"Added message with id " + id, Toast.LENGTH_SHORT)
-//							.show();
+					long id = mDbController.putMessage(sender, recipient,
+							message);
 
 					mController.notifyMessage(id);
 
@@ -181,10 +186,16 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 			}
 		}
 	};
-	
+
 	protected void connect() {
 		TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		phoneNbr = mTelephonyManager.getLine1Number();
+		String localNbr = mTelephonyManager.getLine1Number();
+		String localCode = mTelephonyManager.getNetworkCountryIso()
+				.toUpperCase();
+
+		if (localNbr != null && localCode != null) {
+			phoneNbr = fixInternationalPhoneForSubscribe(getInternaltionalNumber(localNbr, localCode));
+		}
 
 		if (phoneNbr != null) {
 			client.setHost("195.178.228.45");
@@ -196,6 +207,33 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 			Toast.makeText(this, R.string.failed_phone, Toast.LENGTH_SHORT)
 					.show();
 		}
+	}
+	
+	protected static String fixInternationalPhoneForSubscribe(String internationalNumber) {
+		internationalNumber = internationalNumber.replaceAll("[\\D]", "");
+		return internationalNumber;
+	}
+	
+	protected static String getInternaltionalNumber(String phoneNbr, String countryCode) {
+
+		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+
+		try {
+			PhoneNumber numberProto = phoneUtil.parse(phoneNbr, countryCode);
+			int code = numberProto.getCountryCode();
+
+//			Log.i(TAG, "INTERNATIONAL: " + phoneUtil.format(numberProto, PhoneNumberFormat.INTERNATIONAL));
+//			Log.i(TAG, "NATIONAL: " + phoneUtil.format(numberProto, PhoneNumberFormat.NATIONAL));
+//			Log.i(TAG, "E164: " + phoneUtil.format(numberProto, PhoneNumberFormat.E164));
+//			Log.i(TAG, "RFC3966: " + phoneUtil.format(numberProto, PhoneNumberFormat.RFC3966));
+
+			return phoneUtil.format(numberProto, PhoneNumberFormat.INTERNATIONAL);
+		} catch (NumberParseException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+
 	}
 
 	protected void subscribe() {
@@ -210,6 +248,10 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 		mController.showChatFragment(recipient);
 	}
 
+	protected void openContacts() {
+		mController.showContactsFragment();
+	}
+
 	public void sendMessage(String recipient, String message) {
 		StringBuilder topic = new StringBuilder();
 		topic.append(topicBase);
@@ -219,11 +261,14 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 		try {
 			msg.put("sender", phoneNbr);
 			msg.put("message", message);
+			msg.put("recipient", recipient);
 
-			
-			mDbController.putMessage(phoneNbr, message);
-			
-			client.publishRetain(topic.toString(), msg.toString().getBytes(), EXACTLY_ONCE);
+			long id = mDbController.putMessage(phoneNbr, recipient, message);
+
+			mController.notifyMessage(id);
+
+			client.publishRetain(topic.toString(), msg.toString().getBytes(),
+					EXACTLY_ONCE);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -233,12 +278,20 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 		return mDbController;
 	}
 
+	protected void removeFragment(String tag){
+		mController.removeFragment(tag);
+	}
+	
+	protected void pop() {
+		mController.pop();
+	}
+	
 	protected void disconnect() {
 		if (client != null)
 			client.disconnect();
 	}
-	
-	protected String getPhonenbr(){
+
+	protected String getPhonenbr() {
 		return phoneNbr;
 	}
 

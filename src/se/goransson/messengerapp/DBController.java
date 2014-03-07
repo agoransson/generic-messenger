@@ -45,13 +45,14 @@ public class DBController {
 
 	private static final String KEY_ID = "id";
 	private static final String KEY_SENDER = "sender";
+	private static final String KEY_RECIPIENT = "recipient";
 	private static final String KEY_MESSAGE = "message";
 	private static final String KEY_CREATED_AT = "created_at";
 
 	private static final String CREATE_TABLE_MESSAGES = "CREATE TABLE "
 			+ TABLE_MESSAGES + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
-			+ KEY_SENDER + " TEXT," + KEY_MESSAGE + " TEXT," + KEY_CREATED_AT
-			+ " DATETIME" + ")";
+			+ KEY_SENDER + " TEXT," + KEY_RECIPIENT + " TEXT," + KEY_MESSAGE
+			+ " TEXT," + KEY_CREATED_AT + " DATETIME" + ")";
 
 	// Version of the database, used to f.ex. update structure of database in
 	// "onUpgrade"
@@ -90,14 +91,17 @@ public class DBController {
 	 * 
 	 * @param sender
 	 *            the sender
+	 * @param recipient
+	 *            the recipient
 	 * @param message
 	 *            the message
 	 */
-	public long putMessage(String sender, String message) {
+	public long putMessage(String sender, String recipient, String message) {
 		open();
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_SENDER, sender);
+		values.put(KEY_RECIPIENT, recipient);
 		values.put(KEY_MESSAGE, message);
 		values.put(KEY_CREATED_AT, getDateTime());
 
@@ -155,8 +159,8 @@ public class DBController {
 
 		String myNbr = activity.getPhonenbr();
 
-		String where = KEY_SENDER + "=?";
-		String[] args = { sender };
+		String where = KEY_SENDER + "=?" + " OR " + KEY_RECIPIENT + "=?";
+		String[] args = { sender, sender };
 
 		open();
 
@@ -173,8 +177,9 @@ public class DBController {
 					msg = new OutgoingMessage();
 				msg.setId(c.getInt(0));
 				msg.setSender(c.getString(1));
-				msg.setMessage(c.getString(2));
-				msg.setCreatedAt(c.getString(3));
+				msg.setRecipient(c.getString(2));
+				msg.setMessage(c.getString(3));
+				msg.setCreatedAt(c.getString(4));
 
 				messages.add(msg);
 			} while (c.moveToNext());
@@ -233,8 +238,9 @@ public class DBController {
 				msg = new OutgoingMessage();
 			msg.setId(c.getInt(0));
 			msg.setSender(c.getString(1));
-			msg.setMessage(c.getString(2));
-			msg.setCreatedAt(c.getString(3));
+			msg.setRecipient(c.getString(2));
+			msg.setMessage(c.getString(3));
+			msg.setCreatedAt(c.getString(4));
 		}
 
 		c.close();

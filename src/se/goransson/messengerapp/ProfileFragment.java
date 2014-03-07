@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -87,6 +88,17 @@ public class ProfileFragment extends Fragment implements Notifiable {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.chat_menu, menu);
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		if( item.getItemId() == R.id.new_message ){
+			((MainActivity) getActivity()).openContacts();
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
 
 	private class ChatClickListener implements OnItemClickListener {
 
@@ -110,11 +122,20 @@ public class ProfileFragment extends Fragment implements Notifiable {
 
 		String sender = msg.getSender();
 
+		int index = -1;
+		
 		for (int i = 0; i < chats.size(); i++) {
 			if (chats.get(i).getSender().equals(sender)) {
-				chats.remove(i);
-				chats.add(i, msg);
+				index = i;
+				break;
 			}
+		}
+		
+		if( index != -1 ){
+			chats.remove(index);
+			chats.add(index, msg);
+		}else{
+			chats.add(msg);
 		}
 
 		adapter.notifyDataSetChanged();

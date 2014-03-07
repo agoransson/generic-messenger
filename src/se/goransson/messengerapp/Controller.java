@@ -17,6 +17,8 @@ package se.goransson.messengerapp;
  * 
  */
 
+import java.security.spec.MGF1ParameterSpec;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -38,6 +40,7 @@ public class Controller {
 	private ConnectionFragment mConnectionFragment;
 	private ProfileFragment mProfileFragment;
 	private ChatFragment mChatFragment;
+	private ContactsFragment mContactFragment;
 
 	public Controller(Activity activity) {
 		this.mActivity = activity;
@@ -64,9 +67,9 @@ public class Controller {
 			Bundle args = new Bundle();
 			args.putString("phonenbr", phoneNbr);
 			mProfileFragment.setArguments(args);
-		}
 
-		showFragment(mProfileFragment, "profile");
+			showFragment(mProfileFragment, "profile");
+		}
 	}
 
 	public void showChatFragment(String phoneNbr) {
@@ -82,6 +85,18 @@ public class Controller {
 		mChatFragment.setSender(phoneNbr);
 
 		showFragment(mChatFragment, "chat");
+	}
+
+	public void showContactsFragment() {
+		if (mContactFragment == null) {
+			mContactFragment = new ContactsFragment();
+
+			Bundle args = new Bundle();
+			// No args
+			mContactFragment.setArguments(args);
+		}
+
+		showFragment(mContactFragment, "contacts", false);
 	}
 
 	/**
@@ -100,17 +115,27 @@ public class Controller {
 	 * @param backstack
 	 */
 	private void showFragment(Fragment frag, String tag, boolean backstack) {
-
-		if (backstack)
-			mFragmentManager.beginTransaction()
-					.replace(R.id.container, frag, tag).addToBackStack(tag)
-					.commitAllowingStateLoss();
-		else
-			mFragmentManager.beginTransaction()
-					.replace(R.id.container, frag, tag)
-					.commitAllowingStateLoss();
+		if( mFragmentManager.findFragmentByTag(tag) == null ){
+			if (backstack)
+				mFragmentManager.beginTransaction()
+						.replace(R.id.container, frag, tag).addToBackStack(tag)
+						.commitAllowingStateLoss();
+			else {
+				mFragmentManager.beginTransaction()
+						.replace(R.id.container, frag, tag)
+						.commitAllowingStateLoss();
+			}
+		}else{
+			mFragmentManager.beginTransaction().
+		}
 	}
 
+	public void removeFragment(String tag) {
+		Fragment frag = mFragmentManager.findFragmentByTag(tag);
+		
+		mFragmentManager.beginTransaction().remove(frag).commit();
+	}
+	
 	public Fragment getActiveFragment() {
 		if (mFragmentManager.getBackStackEntryCount() == 0) {
 			return null;
@@ -136,5 +161,9 @@ public class Controller {
 			if (curFragment.isVisible())
 				((Notifiable) curFragment).notifyMessage(id);
 		}
+	}
+
+	public void pop() {
+		mFragmentManager.popBackStack();
 	}
 }
