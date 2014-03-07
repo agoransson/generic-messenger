@@ -82,7 +82,7 @@ public class ChatFragment extends Fragment implements Notifiable {
 
 	@Override
 	public void onResume() {
-		MainActivity act = (MainActivity) getActivity();
+//		MainActivity act = (MainActivity) getActivity();
 		otherParty.setText(this.sender);
 		loadAllMessages();
 		super.onResume();
@@ -112,10 +112,10 @@ public class ChatFragment extends Fragment implements Notifiable {
 			String sender = msg.getString("sender");
 			String message = msg.getString("message");
 
-			boolean newSender = true;
+//			boolean newSender = true;
 
 			if (otherParty.getText().toString().equals(sender)) {
-				Message m = new OutgoingMessage();
+				Message m = new Message();
 				m.setSender(sender);
 				m.setMessage(message);
 
@@ -141,7 +141,7 @@ public class ChatFragment extends Fragment implements Notifiable {
 
 		Message msg = db.getMessage(id);
 
-		String sender = msg.getSender();
+//		String sender = msg.getSender();
 
 //		if (sender.equals(this.sender)) {
 			messages.add(msg);

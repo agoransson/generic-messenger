@@ -22,7 +22,7 @@ package se.goransson.messengerapp;
  * @author andreas
  * 
  */
-public abstract class Message {
+public class Message {
 
 	private int id;
 	private String sender;

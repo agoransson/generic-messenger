@@ -134,15 +134,12 @@ public class DBController {
 		if (c.moveToFirst()) {
 			do {
 				String phoneNbr = c.getString(1);
-				Message msg = null;
-				if (!phoneNbr.equals(myNbr))
-					msg = new IncommingMessage();
-				else
-					msg = new OutgoingMessage();
+				Message msg = new Message();
 				msg.setId(c.getInt(0));
 				msg.setSender(c.getString(1));
-				msg.setMessage(c.getString(2));
-				msg.setCreatedAt(c.getString(3));
+				msg.setRecipient(c.getString(2));
+				msg.setMessage(c.getString(3));
+				msg.setCreatedAt(c.getString(4));
 
 				messages.add(msg);
 			} while (c.moveToNext());
@@ -170,11 +167,7 @@ public class DBController {
 		if (c.moveToFirst()) {
 			do {
 				String phoneNbr = c.getString(1);
-				Message msg = null;
-				if (!phoneNbr.equals(myNbr))
-					msg = new IncommingMessage();
-				else
-					msg = new OutgoingMessage();
+				Message msg = new Message();
 				msg.setId(c.getInt(0));
 				msg.setSender(c.getString(1));
 				msg.setRecipient(c.getString(2));
@@ -230,12 +223,7 @@ public class DBController {
 
 		Message msg = null;
 		if (c.moveToFirst()) {
-			String phoneNbr = c.getString(1);
-
-			if (!phoneNbr.equals(myNbr))
-				msg = new IncommingMessage();
-			else
-				msg = new OutgoingMessage();
+			msg = new Message();
 			msg.setId(c.getInt(0));
 			msg.setSender(c.getString(1));
 			msg.setRecipient(c.getString(2));

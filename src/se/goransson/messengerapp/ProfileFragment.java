@@ -46,7 +46,7 @@ public class ProfileFragment extends Fragment implements Notifiable {
 	private ArrayList<Message> chats = new ArrayList<Message>();
 
 	private ListView chatView;
-	private MessageAdapter adapter;
+	private ChatAdapter adapter;
 
 	private ChatClickListener itemClickListener = new ChatClickListener();
 
@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment implements Notifiable {
 		phoneNbr = (TextView) v.findViewById(R.id.profile_fragment_username);
 		chatView = (ListView) v.findViewById(R.id.profile_fragment_chatlist);
 
-		adapter = new MessageAdapter(getActivity(), R.layout.chat_item, chats);
+		adapter = new ChatAdapter(getActivity(), R.layout.chat_item, chats);
 		chatView.setAdapter(adapter);
 
 		chatView.setOnItemClickListener(itemClickListener);

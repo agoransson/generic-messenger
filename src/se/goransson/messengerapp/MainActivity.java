@@ -17,6 +17,8 @@ package se.goransson.messengerapp;
  * 
  */
 
+import java.util.Locale;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,8 +81,10 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Intent service = new Intent(MainActivity.this, QatjaService.class);
-		bindService(service, connection, Context.BIND_AUTO_CREATE);
+		if (!isBound) {
+			Intent service = new Intent(MainActivity.this, QatjaService.class);
+			bindService(service, connection, Context.BIND_AUTO_CREATE);
+		}
 	}
 
 	@Override
@@ -191,7 +195,7 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 		TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		String localNbr = mTelephonyManager.getLine1Number();
 		String localCode = mTelephonyManager.getNetworkCountryIso()
-				.toUpperCase();
+				.toUpperCase(Locale.getDefault());
 
 		if (localNbr != null && localCode != null) {
 			phoneNbr = fixInternationalPhoneForSubscribe(getInternaltionalNumber(localNbr, localCode));
@@ -220,7 +224,7 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 
 		try {
 			PhoneNumber numberProto = phoneUtil.parse(phoneNbr, countryCode);
-			int code = numberProto.getCountryCode();
+//			int code = numberProto.getCountryCode();
 
 //			Log.i(TAG, "INTERNATIONAL: " + phoneUtil.format(numberProto, PhoneNumberFormat.INTERNATIONAL));
 //			Log.i(TAG, "NATIONAL: " + phoneUtil.format(numberProto, PhoneNumberFormat.NATIONAL));
@@ -233,7 +237,6 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 		}
 
 		return null;
-
 	}
 
 	protected void subscribe() {
@@ -277,14 +280,6 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 	protected DBController getDatabaseController() {
 		return mDbController;
 	}
-
-	protected void removeFragment(String tag){
-		mController.removeFragment(tag);
-	}
-	
-	protected void pop() {
-		mController.pop();
-	}
 	
 	protected void disconnect() {
 		if (client != null)
@@ -295,4 +290,12 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 		return phoneNbr;
 	}
 
+	protected void popFragment(){
+		mController.popFragment();
+	}
+
+	public void startChat(String phoneNbr) {
+		mController.popFragment();
+		mController.showChatFragment(phoneNbr);
+	}
 }

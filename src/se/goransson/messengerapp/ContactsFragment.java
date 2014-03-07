@@ -18,7 +18,6 @@ package se.goransson.messengerapp;
  */
 import java.util.ArrayList;
 
-import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Context;
 import android.database.Cursor;
@@ -28,7 +27,6 @@ import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 /**
  * 
@@ -67,10 +65,10 @@ public class ContactsFragment extends ListFragment {
 		phoneNbr = MainActivity.fixInternationalPhoneForSubscribe(MainActivity
 				.getInternaltionalNumber(phoneNbr, localCode));
 
-		Toast.makeText(getActivity(), phoneNbr, Toast.LENGTH_SHORT).show();
-
+//		Toast.makeText(getActivity(), phoneNbr, Toast.LENGTH_SHORT).show();
+		
 		MainActivity act = (MainActivity) getActivity();
-		act.pop();
+		act.startChat(phoneNbr);
 	}
 
 	private void getAllContacts() {
@@ -85,7 +83,7 @@ public class ContactsFragment extends ListFragment {
 							.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
 			String phoneNumber = phones
 					.getString(phones
-							.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
+							.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
 			Contact c = new Contact(name, phoneNumber);
 			contacts.add(c);

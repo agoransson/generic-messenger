@@ -17,8 +17,6 @@ package se.goransson.messengerapp;
  * 
  */
 
-import java.security.spec.MGF1ParameterSpec;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -96,7 +94,7 @@ public class Controller {
 			mContactFragment.setArguments(args);
 		}
 
-		showFragment(mContactFragment, "contacts", false);
+		showFragment(mContactFragment, "contacts");
 	}
 
 	/**
@@ -115,18 +113,14 @@ public class Controller {
 	 * @param backstack
 	 */
 	private void showFragment(Fragment frag, String tag, boolean backstack) {
-		if( mFragmentManager.findFragmentByTag(tag) == null ){
-			if (backstack)
-				mFragmentManager.beginTransaction()
-						.replace(R.id.container, frag, tag).addToBackStack(tag)
-						.commitAllowingStateLoss();
-			else {
-				mFragmentManager.beginTransaction()
-						.replace(R.id.container, frag, tag)
-						.commitAllowingStateLoss();
-			}
-		}else{
-			mFragmentManager.beginTransaction().
+		if (backstack)
+			mFragmentManager.beginTransaction()
+					.replace(R.id.container, frag, tag).addToBackStack(tag)
+					.commitAllowingStateLoss();
+		else {
+			mFragmentManager.beginTransaction()
+					.replace(R.id.container, frag, tag)
+					.commitAllowingStateLoss();
 		}
 	}
 
@@ -163,7 +157,7 @@ public class Controller {
 		}
 	}
 
-	public void pop() {
+	public void popFragment() {
 		mFragmentManager.popBackStack();
 	}
 }

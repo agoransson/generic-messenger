@@ -20,7 +20,7 @@ package se.goransson.messengerapp;
 import java.util.List;
 
 import android.app.Activity;
-import android.util.Log;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,15 +31,19 @@ import android.widget.TextView;
 /**
  * 
  * @author andreas
- *
+ * 
  */
 public class MessageAdapter extends ArrayAdapter<Message> {
 
 	private static final String TAG = "MessageAdapter";
-	
+
 	List<Message> messages;
 	Activity context;
 	int layoutId;
+
+	// Row types for client
+	public static final int ROW_TYPE_INCOMMING = 0;
+	public static final int ROW_TYPE_OUTGOING = 1;
 
 	public MessageAdapter(Activity context, int textViewResourceId,
 			List<Message> messages) {
@@ -50,70 +54,57 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View v = convertView;
-		ViewHolder holder;
-		
-		if( layoutId != R.layout.chat_item ){
-//			if (messages.get(position) instanceof IncommingMessage) {
-//				layoutId = R.layout.message_item_incomming;
-//			} else if (messages.get(position) instanceof OutgoingMessage) {
-//				layoutId = R.layout.message_item_outgoing;
-//			}
-			MainActivity act = (MainActivity) context;
-			if( messages.get(position).getSender().equals(act.getPhonenbr())){
-				layoutId = R.layout.message_item_outgoing;
-				Log.i(TAG, "outgoing");
-			}else{
-				layoutId = R.layout.message_item_incomming;
-				Log.i(TAG, "incomming");
-			}
-		}
-		
-		if (v == null) {
-			LayoutInflater vi = LayoutInflater.from(context);
+	public int getItemViewType(int position) {
+		MainActivity act = (MainActivity) context;
 
-			v = vi.inflate(layoutId, null);
-
-			holder = new ViewHolder();
-
-			if (layoutId == R.layout.chat_item) {
-				holder.profile = (ImageView) v
-						.findViewById(R.id.chat_item_profile);
-				holder.sender = (TextView) v
-						.findViewById(R.id.chat_item_sender);
-				holder.message = (TextView) v
-						.findViewById(R.id.chat_item_lastmessage);
-			} else if (layoutId == R.layout.message_item_incomming) {
-				holder.message = (TextView) v.findViewById(R.id.message_item_incomming_message);
-				holder.createdAt = (TextView) v.findViewById(R.id.message_item_incomming_time);
-			} else if (layoutId == R.layout.message_item_outgoing) {
-				holder.message = (TextView) v.findViewById(R.id.message_item_outgoing_message);
-				holder.createdAt = (TextView) v.findViewById(R.id.message_item_outgoing_time);
-			}
-
-			v.setTag(holder);
+		Message item = getItem(position);
+		if (item.getSender().equals(act.getPhonenbr())) {
+			return ROW_TYPE_OUTGOING;
 		} else {
-			holder = (ViewHolder) v.getTag();
+			return ROW_TYPE_INCOMMING;
+		}
+	}
+
+	@Override
+	public int getViewTypeCount() {
+		return 2;
+	}
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		final Message msg = messages.get(position);
+		
+		TextView message, createdAt;
+		
+		View row = convertView;
+		LayoutInflater inflater = null;
+		int type = getItemViewType(position);
+
+		if (row == null) {
+			if (type == ROW_TYPE_INCOMMING) {
+				inflater = (LayoutInflater) context
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				row = inflater.inflate(R.layout.message_item_incomming, null);
+			} else {
+				inflater = (LayoutInflater) context
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				row = inflater.inflate(R.layout.message_item_outgoing, null);
+			}
+		}
+		if (type == ROW_TYPE_INCOMMING) {
+			message = (TextView) row.findViewById(R.id.message_item_incomming_message);
+			createdAt = (TextView) row.findViewById(R.id.message_item_incomming_time);
+		} else {
+			message = (TextView) row.findViewById(R.id.message_item_outgoing_message);
+			createdAt = (TextView) row.findViewById(R.id.message_item_outgoing_time);
 		}
 
-		if (holder.sender != null)
-			holder.sender
-					.setText("From: " + messages.get(position).getSender());
+		if (message != null)
+			message.setText(msg.getMessage());
 
-		if (holder.message != null)
-			holder.message.setText(messages.get(position).getMessage());
+		if (createdAt != null)
+			createdAt.setText(msg.getCreatedAt());
 
-		if (holder.createdAt != null)
-			holder.createdAt.setText(messages.get(position).getCreatedAt());
-
-		return v;
+		return row;
 	}
 
-	static class ViewHolder {
-		ImageView profile;
-		TextView sender;
-		TextView message;
-		TextView createdAt;
-	}
 }
