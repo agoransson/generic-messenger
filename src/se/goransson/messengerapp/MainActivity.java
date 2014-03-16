@@ -32,6 +32,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -103,14 +105,6 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 	protected void onStop() {
 		super.onStop();
 		unbindService(connection);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-
-		return true;
 	}
 
 	private ServiceConnection connection = new ServiceConnection() {
@@ -202,7 +196,7 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 		}
 
 		if (phoneNbr != null) {
-			client.setHost("195.178.228.45");
+			client.setHost(getBroker());
 			client.setPort(1883);
 			client.setId(phoneNbr);
 			client.setKeepAlive(7000);
@@ -213,6 +207,11 @@ public class MainActivity extends Activity implements MQTTConnectionConstants,
 		}
 	}
 	
+	private String getBroker() {
+		SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+		return prefs.getString("broker", "broker.mqtt-dashboard.com");
+	}
+
 	protected static String fixInternationalPhoneForSubscribe(String internationalNumber) {
 		internationalNumber = internationalNumber.replaceAll("[\\D]", "");
 		return internationalNumber;

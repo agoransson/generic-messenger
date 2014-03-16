@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="incomming_message.svg"
+   inkscape:export-filename="/home/ksango/workspace/InstantAdventures/project-resources/adventure_item_pressed.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="22.579318"
+     inkscape:cx="7.2404204"
+     inkscape:cy="6.3423296"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer2"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1138"
+     inkscape:window-x="1592"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="shadow"
+     style="display:inline">
+    <path
+       style="fill:#969671;fill-opacity:1;stroke:#969671;stroke-width:0.99999726px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline"
+       d="m -0.4991147,1046.1676 c -0.030297,1.4411 0.717448,2.0176 1.9999887,2 l 0.4498728,0 -0.8018292,4.6946 7.3915717,-4.6946 12.9602727,0 c 1.731947,0.014 1.999939,-0.9074 1.999989,-2 l 0,-8 c 0.0052,-1.0108 -0.05197,-1.9896 -1.999989,-2 l -19.999888,0 c -1.5166568,0.01 -1.9863823,0.8277 -1.9999887,2 z"
+       id="path3073"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccccc"
+       inkscape:export-filename="/home/ksango/workspace/InstantAdventures/project-resources/instruction_bubble_normal.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+  </g>
+  <g
+     inkscape:label="normal"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline">
+    <path
+       style="fill:#90d5b3;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline"
+       d="m 0.50088662,1045.1676 c -0.030297,1.4411 0.71745198,2.0176 1.99999988,2 l 0.4499089,0 -0.8017688,4.6946 7.3915687,-4.6946 12.9602917,0 c 1.731957,0.014 1.99995,-0.9074 2,-2 l 0,-8 c 0.0052,-1.0108 -0.05197,-1.9896 -2,-2 l -20.0000005,0 c -1.51666518,0.01 -1.98639338,0.8277 -1.99999988,2 z"
+       id="path3073-8"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccccc"
+       inkscape:export-filename="C:\Users\ksango\Documents\GitHub\generic-messenger\_productionfiles\outgoing_message.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="focused"
+     style="display:inline" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="pressed"
+     style="display:none">
+    <rect
+       style="fill:#f99f37;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.29884696;stroke-opacity:1;display:inline"
+       id="rect2989-4-2"
+       width="22.701153"
+       height="10.701153"
+       x="-34.705914"
+       y="1021.2258"
+       ry="3.9373572"
+       inkscape:export-filename="/home/ksango/workspace/InstantAdventures/project-resources/adventure_item_pressed.png"
+       inkscape:export-xdpi="300.15005"
+       inkscape:export-ydpi="300.15005" />
+  </g>
+</svg>
